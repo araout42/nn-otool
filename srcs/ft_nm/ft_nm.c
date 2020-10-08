@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 04:29:16 by araout            #+#    #+#             */
-/*   Updated: 2020/10/05 13:38:05 by araout           ###   ########.fr       */
+/*   Updated: 2020/10/08 17:16:28 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,14 @@ int				symtab_64(t_symtab_command *sym, char *ptr)
 	while (sym->nsyms > i)
 	{
 		if (!el[i].n_value)
-			printf("\t\t  %d %s\n", el[i].n_sect, strtable + el[i].n_un.n_strx);
+		{
+
+			ft_printf("\t\t  %d %s\n", el[i].n_sect, strtable + el[i].n_un.n_strx);
+		}
 		else
-			printf("%0.17llx %d %s\n", el[i].n_value, el[i].n_sect, strtable + el[i].n_un.n_strx);
+		{
+			ft_printf("%llx %d %s\n", el[i].n_value, el[i].n_sect, strtable + el[i].n_un.n_strx);
+		}
 		i++;
 	}
 	return (0);
@@ -63,17 +68,18 @@ int			handle_64(char *ptr)
 	t_load_command			*lc;
 	int						i;
 
-	i = 0;
+	i = -1;
 	header = (t_mach_header_64 *)ptr;
 	ncmds = header->ncmds;
 	lc = (void *)ptr + sizeof(t_mach_header_64);
-	while (i < ncmds)
+	while (++i < ncmds)
 	{
-		if (lc->cmd == LC_SYMTAB)
+		if (lc && lc->cmd == LC_SYMTAB)
 		{
 			symtab_64((t_symtab_command *)lc, ptr);
 			break;
 		}
+
 		lc = (void *)lc + lc->cmdsize;
 	}
 
@@ -122,27 +128,27 @@ void		print_error(int err, char *f)
 {
 	(void)err;
 	if (errno ==  EPERM)
-		printf("ft_nm: error: %s : Operation not permitted.\n", f);
+		ft_printf("ft_nm: error: %s : Operation not permitted.\n", f);
 	else if (errno == ENOENT)
-		printf("ft_nm: error: %s : No such file or directory.\n", f);
+		ft_printf("ft_nm: error: %s : No such file or directory.\n", f);
 	else if (errno == EACCES)
-		printf("ft_nm: errror: %s : Permission denied.\n", f);
+		ft_printf("ft_nm: errror: %s : Permission denied.\n", f);
 	else if (errno == EISDIR)
-		printf("ft_nm: error: %s : Is a directory.\n", f);
+		ft_printf("ft_nm: error: %s : Is a directory.\n", f);
 	else if (errno == ENFILE || errno == EMFILE)
-		printf("ft_nm: error: %s : too many open files.\n", f);
+		ft_printf("ft_nm: error: %s : too many open files.\n", f);
 	else if (errno == EFBIG)
-		printf("ft_nm: error: %s : File too large.\n", f);
+		ft_printf("ft_nm: error: %s : File too large.\n", f);
 	else if (errno == EROFS)
-		printf("ft_nm: error: %s : Read-only file system.\n", f);
+		ft_printf("ft_nm: error: %s : Read-only file system.\n", f);
 	else if (errno == EINTR)
-		printf("ft_nm: error:  Interrupted system call\n");
+		ft_printf("ft_nm: error:  Interrupted system call\n");
 	else if (errno == ENOSPC)
-		printf("ft_nm: error: No space left on device.\n");
+		ft_printf("ft_nm: error: No space left on device.\n");
 	else if (errno == ENOMEM)
-		printf("ft_nm: error: Cannot allocate memory.\n");
+		ft_printf("ft_nm: error: Cannot allocate memory.\n");
 	else if (errno == ENAMETOOLONG)
-		printf("ft_nm: error: %s file name too long", f);
+		ft_printf("ft_nm: error: %s file name too long", f);
 }
 
 

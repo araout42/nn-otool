@@ -6,7 +6,7 @@
 #    By: bihattay <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/09 12:43:23 by bihattay          #+#    #+#              #
-#    Updated: 2020/10/05 14:23:52 by araout           ###   ########.fr        #
+#    Updated: 2020/10/08 17:01:59 by araout           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ SOURCES = 	ft_atoi.c\
 			ft_strclr.c\
 			ft_strcmp.c\
 			ft_strcpy.c\
+			ft_abs.c\
 			ft_strdel.c\
 			ft_strdup.c\
 			ft_strequ.c\
@@ -51,6 +52,7 @@ SOURCES = 	ft_atoi.c\
 			ft_strncpy.c\
 			ft_print_hex.c\
 			ft_putnstr.c\
+			ft_putnstr_fd.c\
 			ft_strnstr.c\
 			ft_strrchr.c\
 			ft_strstr.c\
@@ -58,6 +60,9 @@ SOURCES = 	ft_atoi.c\
 			ft_toupper.c\
 			ft_strsub.c\
 			ft_strjoin.c\
+			unicode.c\
+			unicode_2.c\
+			ft_putstr_non_printable.c\
 			ft_atoi_base.c\
 			ft_strtrim.c\
 			ft_strsplit.c\
@@ -77,8 +82,11 @@ SOURCES = 	ft_atoi.c\
 			ft_ishex.c\
 			ft_lstnew.c\
 			ft_lstdelone.c\
+			ft_putstr_non_printable_fd.c\
+			ft_get_bit.c\
 			ft_lstdel.c\
 			ft_lstadd.c\
+			ft_print_hex_fd.c\
 			ft_lstiter.c\
 			ft_strjoin_if.c\
 			ft_strlen_if.c\

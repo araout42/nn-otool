@@ -6,7 +6,7 @@
 #    By: araout <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/01 04:38:21 by araout            #+#    #+#              #
-#    Updated: 2020/10/04 05:51:20 by araout           ###   ########.fr        #
+#    Updated: 2020/10/08 17:18:18 by araout           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ OTOOL_DEPEN = $(OTOOL_OBJ) Makefile $(OTOOL_HEADERS)
 
 CC = gcc
 
-CFLAGS +=  -Wall -Wextra -Werror $(INCLUDES)
+CFLAGS += -g -Wall -Wextra -Werror $(INCLUDES)
 
 all: lib $(NM) $(OTOOL)
 

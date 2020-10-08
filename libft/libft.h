@@ -6,7 +6,7 @@
 /*   By: bihattay <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 21:49:30 by bihattay          #+#    #+#             */
-/*   Updated: 2020/10/05 14:23:31 by araout           ###   ########.fr       */
+/*   Updated: 2020/10/08 16:57:57 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,10 @@ void			ft_striteri(char *s, void (*f)(unsigned int, char *));
 void			ft_striter(char *s, void (*f)(char *));
 void			ft_print_words_tables(char **tab);
 void			ft_putchar(char c);
-void			ft_putstr(char *str);
 void			ft_putnbr(int n);
+size_t			ft_putnstr_non_printable_fd(char *str, size_t n, int fd);
+size_t			ft_putstr(const char *str);
+size_t			ft_putnstr_fd(char *str, size_t n, int fd);
 void			ft_putendl(char const *s);
 void			ft_putchar_fd(char c, int fd);
 void			ft_putstr_fd(char const *s, int fd);
@@ -81,6 +83,7 @@ void			ft_putendl_fd(char const *s, int fd);
 void			ft_putchar_error(char c);
 void			ft_putnbr_error(int n);
 char			*ft_strchr(const char *s, int c);
+void			ft_print_hex_fd(unsigned int value, int length, int fd);
 char			*ft_strrchr(const char *s, int c);
 char			*ft_strdup(const char *src);
 char			*ft_strcpy(char *dest, const char *src);
@@ -108,6 +111,7 @@ int				ft_ishex(int c);
 char			*ft_strnew(size_t size);
 char			*ft_strmapi(char const *s, char(*f)(unsigned int, char));
 char			*ft_strmap(char const *s, char (*f)(char));
+int				ft_printf(const char *format, ...);
 char			*ft_strstr(const char *str, const char *to_find);
 char			*ft_strnstr(const char	*str, const char *to_find, size_t len);
 char			*ft_itoa(int n);
@@ -119,7 +123,23 @@ void			ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 void			ft_lstdelone(t_list **alst, void (*del)(void*, size_t));
 void			ft_lstdel(t_list **alst, void (*del)(void *, size_t));
 void			ft_lstadd(t_list **alst, t_list *new);
-int				ft_printf(const char *format, ...);
 int				ft_printf_fd(const int fd, const char *format, ...);
+int				ft_putstr_uni(int *str);
+int				ft_putnstr_uni(int *str, int len);
+size_t			ft_putstr_non_printable(char *str);
+void			ft_putchar_uni(int c);
+void			print_two_bytes(unsigned int c, int fd);
+void			print_three_bytes(unsigned int c, int fd);
+void			print_four_bytes(unsigned int c, int fd);
+int				ft_strlen_uni(int *str);
+void			ft_putchar_uni_fd(int c, int fd);
+int				ft_putstr_uni_fd(int *str, int fd);
+int				ft_putnstr_uni_fd(int *str, int len, int fd);
+int				ft_set_bit(int nbr, int idx, char value);
+int				ft_get_bit(int nbr, int idx);
+int				ft_get_firstbit(int nbr);
+int				ft_get_lastbit(int nbr);
+
+
 
 #endif

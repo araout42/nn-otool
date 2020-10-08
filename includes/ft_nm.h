@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 04:32:17 by araout            #+#    #+#             */
-/*   Updated: 2020/10/05 13:24:09 by araout           ###   ########.fr       */
+/*   Updated: 2020/10/08 17:00:09 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <sys/stat.h>
 # include <stdlib.h>
 # include <errno.h>
+# include "libft.h"
 /*
  ** MACH-O FORMAT
 */
