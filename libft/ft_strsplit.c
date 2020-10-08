@@ -3,75 +3,96 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strsplit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bihattay <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: kicausse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/09 09:40:37 by bihattay          #+#    #+#             */
-/*   Updated: 2018/11/15 03:24:35 by bihattay         ###   ########.fr       */
+/*   Created: 2018/11/06 19:18:38 by kicausse          #+#    #+#             */
+/*   Updated: 2018/11/06 19:18:39 by kicausse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdlib.h>
 
-static int			nbword(char const *str, char c)
+static char		*copy_word(const char *src, char limit)
 {
 	int		i;
-	int		wordcount;
+	char	*output;
 
 	i = 0;
-	wordcount = 0;
-	if (str[0] != c && str && str[i] != '\0')
-		wordcount = 1;
-	while (str[i + 1])
+	while (src[i] && src[i] != limit)
+		i++;
+	output = ft_strnew(i);
+	if (output == NULL)
+		return (NULL);
+	i = 0;
+	while (src[i] && src[i] != limit)
 	{
-		if (str[i + 1] != c && str[i] == c)
-			wordcount++;
+		output[i] = src[i];
 		i++;
 	}
-	return (wordcount);
+	output[i] = '\0';
+	return (output);
 }
 
-static char			*getstring(char const *str, int *b, char c)
+static int		count_words(const char *str, char limit)
 {
-	int		i;
-	int		z;
-	char	*res;
-	int		findumonde;
+	int i;
+	int count;
 
-	z = *b;
 	i = 0;
-	findumonde = 0;
-	while (str[z] == c && str[z])
-		z++;
-	while (str[z] != c && str[z])
+	count = 0;
+	while (str[i])
 	{
-		z++;
+		if (str[i] != limit)
+		{
+			count++;
+			while (str[i] && str[i] != limit)
+				i++;
+		}
+		else
+			i++;
+	}
+	return (count + 1);
+}
+
+static char		**free_tab(char **tab, int size)
+{
+	int	i;
+
+	i = 0;
+	while (i < size)
+	{
+		free(tab[i]);
 		i++;
 	}
-	if (!(res = malloc(sizeof(char) * (i + 1))))
-		return (NULL);
-	while (z - i < z)
-		res[findumonde++] = str[z - i--];
-	res[findumonde] = '\0';
-	*b = z;
-	return (res);
+	free(tab);
+	return (NULL);
 }
 
-char				**ft_strsplit(char const *str, char c)
+char			**ft_strsplit(char const *s, char c)
 {
-	char	**tab;
+	char	**output;
 	int		i;
-	int		count;
-	int		b;
+	int		x;
 
-	if (!str)
+	if (s == 0
+		|| !(output = (char**)ft_memalloc(sizeof(char*) * count_words(s, c))))
 		return (NULL);
-	b = 0;
-	count = nbword(str, c);
+	x = 0;
 	i = 0;
-	if (!(tab = malloc(sizeof(char *) * (count + 1))))
-		return (NULL);
-	while (i < count)
-		tab[i++] = getstring(str, &b, c);
-	tab[i] = 0;
-	return (tab);
+	while (s[i])
+	{
+		if (s[i] != c)
+		{
+			if ((output[x] = copy_word(s + i, c)) == NULL)
+				return (free_tab(output, x));
+			while (s[i] && s[i] != c)
+				i++;
+			x++;
+		}
+		else
+			i++;
+	}
+	output[x] = 0;
+	return (output);
 }

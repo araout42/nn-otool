@@ -3,16 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ft_abs.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bihattay <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: kicausse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/13 11:21:37 by bihattay          #+#    #+#             */
-/*   Updated: 2018/11/13 11:24:57 by bihattay         ###   ########.fr       */
+/*   Created: 2018/11/06 17:08:19 by kicausse          #+#    #+#             */
+/*   Updated: 2018/11/06 17:08:20 by kicausse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <limits.h>
 
-int		ft_abs(int c)
+unsigned int	ft_abs(int value)
 {
-	return ((c < 0) ? -c : c);
+	if (value == INT_MIN)
+		return ((unsigned int)INT_MAX + 1);
+	return (value > 0 ? value : -value);
 }

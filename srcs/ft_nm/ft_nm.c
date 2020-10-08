@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 04:29:16 by araout            #+#    #+#             */
-/*   Updated: 2020/10/08 17:16:28 by araout           ###   ########.fr       */
+/*   Updated: 2020/10/08 18:11:10 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int			handle_32(char *ptr)
 
 int				symtab_64(t_symtab_command *sym, char *ptr)
 {
-	unsigned int				i;
+	unsigned int	i;
 	char			*strtable;
 	t_nlist_64		*el;
 
@@ -47,15 +47,15 @@ int				symtab_64(t_symtab_command *sym, char *ptr)
 	i = 0;
 	while (sym->nsyms > i)
 	{
-		if (!el[i].n_value)
-		{
-
-			ft_printf("\t\t  %d %s\n", el[i].n_sect, strtable + el[i].n_un.n_strx);
-		}
-		else
-		{
-			ft_printf("%llx %d %s\n", el[i].n_value, el[i].n_sect, strtable + el[i].n_un.n_strx);
-		}
+//		ft_printf("name = %s    -  type = %d   - sect = %d    -  desc = %d   -  value = %llx\n\n\n", strtable + el[i].n_un.n_strx, el[i].n_type, el[i].n_sect, el[i].n_desc, el[i].n_value);
+			if (!el[i].n_value && ft_strlen(strtable + el[i].n_un.n_strx) > 0 && (strtable + el[i].n_un.n_strx)[0] != '/' &&  el[i].n_type < 100 && el[i].n_type != 36 && el[i].n_type != 32)
+			{
+				ft_printf("\t\t %d %s\n", el[i].n_sect, strtable + el[i].n_un.n_strx);
+			}
+			else if (ft_strlen(strtable + el[i].n_un.n_strx) > 0 && (strtable + el[i].n_un.n_strx)[0] != '/' && el[i].n_type < 100 && el[i].n_type != 36 && el[i].n_type != 32)
+			{
+				ft_printf("%0.16llx %d %s\n", el[i].n_value, el[i].n_sect, strtable + el[i].n_un.n_strx);
+			}
 		i++;
 	}
 	return (0);

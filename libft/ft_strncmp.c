@@ -3,29 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bihattay <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: kicausse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/09 12:11:35 by bihattay          #+#    #+#             */
-/*   Updated: 2018/11/13 08:52:46 by bihattay         ###   ########.fr       */
+/*   Created: 2018/11/06 07:09:22 by kicausse          #+#    #+#             */
+/*   Updated: 2018/11/06 07:09:23 by kicausse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_strncmp(const char *s1, const char *s2, size_t n)
+int		ft_strncmp(const char *str1, const char *str2, size_t num)
 {
-	size_t	i;
+	unsigned int i;
 
 	i = 0;
-	if (n == 0)
-		return (0);
-	while (s1[i] != '\0' && s2[i] != '\0' && i < n)
-	{
-		if (s1[i] != s2[i])
-			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+	while ((unsigned int)(str1[i]) && i < num
+			&& (unsigned int)(str1[i]) == (unsigned int)(str2[i]))
 		i++;
-	}
-	if (i == n)
+	if (i == num)
 		return (0);
-	return (((unsigned char)s1[i] - (unsigned char)s2[i]));
+	return ((unsigned char)str1[i] - (unsigned char)str2[i]);
+}
+
+int		ft_strncmp_case(const char *str1, const char *str2, size_t num)
+{
+	unsigned int i;
+
+	i = 0;
+	while ((unsigned int)(str1[i]) && i < num
+			&& ft_tolower(str1[i]) == ft_tolower(str2[i]))
+		i++;
+	if (i == num)
+		return (0);
+	return ((unsigned char)str1[i] - (unsigned char)str2[i]);
 }

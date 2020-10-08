@@ -3,75 +3,69 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bihattay <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: kicausse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/09 10:16:28 by bihattay          #+#    #+#             */
-/*   Updated: 2018/11/11 04:06:11 by bihattay         ###   ########.fr       */
+/*   Created: 2018/11/06 19:23:56 by kicausse          #+#    #+#             */
+/*   Updated: 2018/11/06 19:23:57 by kicausse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <limits.h>
 
-static int			getlen(int n)
+static int	nbr_length(int nbr)
 {
-	int				i;
+	int len;
 
-	i = 1;
+	len = 0;
+	if (nbr <= 0)
+		len++;
+	while (nbr != 0)
+	{
+		nbr /= 10;
+		len++;
+	}
+	return (len);
+}
+
+char		*ft_itoa(int n)
+{
+	char	*output;
+	int		len;
+
+	if (n == INT_MIN)
+		return (ft_strdup("-2147483648"));
+	len = nbr_length(n);
+	output = ft_strnew(len);
+	if (output == 0)
+		return (0);
+	output[0] = '0';
 	if (n < 0)
+		output[0] = '-';
+	n = ft_abs(n);
+	while (n != 0)
 	{
-		n = n * -1;
-		i++;
+		output[--len] = '0' + (n % 10);
+		n /= 10;
 	}
-	while (n > 9)
-	{
-		n = n / 10;
-		i++;
-	}
-	return (i);
+	return (output);
 }
 
-static char			*put_min_int(char *str)
+void		ft_itoa_str(int n, char *str, unsigned int maxlen)
 {
-	str[0] = '-';
-	str[1] = '2';
-	str[2] = '1';
-	str[3] = '4';
-	str[4] = '7';
-	str[5] = '4';
-	str[6] = '8';
-	str[7] = '3';
-	str[8] = '6';
-	str[9] = '4';
-	str[10] = '8';
-	str[11] = '\0';
-	return (str);
-}
+	int len;
 
-char				*ft_itoa(int n)
-{
-	char			*str;
-	int				len;
-	int				ns;
-
-	len = getlen(n);
-	ns = n;
-	if (!(str = (char *)malloc(sizeof(*str) * len + 1)))
-		return (NULL);
-	str[len] = '\0';
-	if (n != -2147483648)
+	len = nbr_length(n);
+	if (maxlen <= 1)
+		return ;
+	str[0] = '0';
+	if (n < 0)
+		str[0] = '-';
+	str[len] = 0;
+	n = ft_abs(n);
+	while (--maxlen != 0 && n != 0)
 	{
-		if (n < 0)
-			n = n * -1;
-		while (len > 0)
-		{
-			str[len - 1] = (n % 10) + 48;
-			n = n / 10;
-			len--;
-		}
-		if (str[0] == '0' && ns != 0)
-			str[0] = '-';
+		str[--len] = '0' + (n % 10);
+		n /= 10;
 	}
-	else
-		put_min_int(str);
-	return (str);
 }

@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   unicode.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: araout </var/mail/araout>                  +#+  +:+       +#+        */
+/*   By: kicausse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/08 16:28:59 by araout            #+#    #+#             */
-/*   Updated: 2020/10/08 16:44:43 by araout           ###   ########.fr       */
+/*   Created: 2018/12/11 15:31:39 by kicausse          #+#    #+#             */
+/*   Updated: 2018/12/11 15:31:39 by kicausse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
 #include "libft.h"
+#include <unistd.h>
 
 void	print_three_bytes(unsigned int c, int fd)
 {

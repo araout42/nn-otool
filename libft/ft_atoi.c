@@ -3,38 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bihattay <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: kicausse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/09 02:42:25 by bihattay          #+#    #+#             */
-/*   Updated: 2018/11/13 08:35:27 by bihattay         ###   ########.fr       */
+/*   Created: 2018/11/06 07:09:22 by kicausse          #+#    #+#             */
+/*   Updated: 2019/07/20 11:07:30 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_atoi(const char *nptr)
+int				ft_atoi(const char *str)
 {
-	int							i;
-	long long int				nb;
-	int							neg;
+	int result;
+	int i;
+	int mult;
 
-	neg = 1;
-	i = 0;
-	nb = 0;
-	while (nptr[i] == ' ' || nptr[i] == '\n' || nptr[i] == '\t' ||
-			nptr[i] == '\r' || nptr[i] == '\f' || nptr[i] == '\v')
-		i++;
-	if ((int)ft_strlen(nptr) > 19 + i && ft_str_is_numeric(nptr + i))
-		return (-1);
-	if (nptr[i] == '-' || nptr[i] == '+')
-		neg = (nptr[i++] == '-' ? -1 : 1);
-	if ((int)ft_strlen(nptr) > 19 + i && neg == -1 &&
-			ft_str_is_numeric(nptr + i))
+	if (str == 0)
 		return (0);
-	while (nptr[i] >= '0' && nptr[i] <= '9' && nptr[i] != '\0')
+	i = 0;
+	result = 0;
+	mult = 1;
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\v' \
+		|| str[i] == '\n' || str[i] == '\r' || str[i] == '\f')
+		i++;
+	if (str[i] == '+' || str[i] == '-')
 	{
-		nb = (nb * 10) + (nptr[i] - '0');
+		if (str[i] == '-')
+			mult = -1;
 		i++;
 	}
-	return (nb * neg);
+	while (str[i] >= '0' && str[i] <= '9')
+		result = result * 10 + str[i++] - '0';
+	return (result * mult);
+}
+
+unsigned int	ft_atoui(const char *str)
+{
+	unsigned int	result;
+	int				i;
+
+	if (str == 0)
+		return (0);
+	i = 0;
+	result = 0;
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\v' \
+		|| str[i] == '\n' || str[i] == '\r' || str[i] == '\f')
+		++i;
+	if (str[i] == '+')
+		++i;
+	while (str[i] >= '0' && str[i] <= '9')
+		result = result * 10 + str[i++] - '0';
+	return (result);
 }
