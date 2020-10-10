@@ -6,7 +6,7 @@
 /*   By: kicausse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/06 07:09:22 by kicausse          #+#    #+#             */
-/*   Updated: 2019/07/16 01:41:15 by araout           ###   ########.fr       */
+/*   Updated: 2020/10/10 14:52:45 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,7 +212,7 @@ int						ft_floor(int min, int value);
 int						ft_ceil(int max, int value);
 int						nbrlen(long long n);
 int						unbrlen(unsigned long long n);
-
+t_list					*mergesorti(t_list *p, int(*cmp)(t_list *a, t_list *b));
 /*
 ** Other
 */

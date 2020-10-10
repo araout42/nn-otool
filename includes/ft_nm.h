@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 04:32:17 by araout            #+#    #+#             */
-/*   Updated: 2020/10/08 17:00:09 by araout           ###   ########.fr       */
+/*   Updated: 2020/10/10 17:12:23 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,14 @@
  ** MACH-O FORMAT
 */
 
+#define N_UNDF 0x0
+#define N_ABS 0x2
+#define N_SECT 0xe
+#define N_PBUD 0xc
+#define N_INDR 0xa
+
+#define N_TYPE 0x0e
+#define N_EXT 0x01
 
 typedef unsigned char				uint8_t;
 typedef unsigned short int			uint16_t;
@@ -52,12 +60,13 @@ typedef integer_t				cpu_threadtype_t;
 
 typedef struct		s_nm
 {
-	char			**files;
-	int				file_count;
-	int				flag;
+	uint64_t		n_value;
+	char			n_sect;
+	char			*n_strx;
+	int				n_type;
+	int				n_ext;
 }					t_nm;
 
-t_nm				g_nm;
 
 typedef struct		mach_header {
 	uint32_t		magic;

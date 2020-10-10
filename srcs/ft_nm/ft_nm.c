@@ -6,7 +6,8 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 04:29:16 by araout            #+#    #+#             */
-/*   Updated: 2020/10/08 18:11:10 by araout           ###   ########.fr       */
+/*   Updated: 2020/10/10 17:13:55 by araout           ###   ########.fr       */
+
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,30 +37,133 @@ int			handle_32(char *ptr)
 	return (0);
 }
 
+t_nm			*make_node(uint64_t n_value, int n_sect, char *n_strx, int type)
+{
+	t_nm		*nm;
+
+	if (!(nm = ft_memalloc(sizeof(t_nm))))
+		return (NULL);
+	nm->n_value = n_value;
+	nm->n_sect = n_sect;
+	nm->n_strx = n_strx;
+	nm->n_type = type & N_TYPE;
+	nm->n_ext = type & N_EXT;
+	return (nm);
+}
+
+int			print_ext(t_nm *nm)
+{
+	if (nm->n_type == N_ABS)
+		ft_printf("a ");
+	else if (nm->n_type == N_INDR)
+		ft_printf("i ");
+	else if (nm->n_type == N_SECT)
+	{
+		if (nm->n_sect == 12)
+			ft_printf("b ");
+		else if (nm->n_sect == 11)
+			ft_printf("d ");
+		else if (nm->n_sect == 1)
+			ft_printf("t ");
+		else
+			ft_printf("s ");
+	}
+	else
+		return (-1);
+	return (0);
+}
+
+void			print_output(t_list *lst)
+{
+	t_nm		*nm;
+
+	while (lst != NULL)
+	{
+		nm = (t_nm *)lst->content;
+		if (nm->n_type == N_UNDF)
+			ft_printf("                  U ");
+		else if (nm->n_type == N_ABS || nm->n_type == N_SECT || nm->n_type == N_INDR)
+			ft_printf("%0.16llx ", nm->n_value);
+		if (nm->n_ext)
+		{
+			if (nm->n_type == N_ABS)
+				ft_printf("A ");
+			else if (nm->n_type == N_INDR)
+				ft_printf("I ");
+			else if (nm->n_type == N_SECT)
+			{
+				if (nm->n_sect == 12)
+					ft_printf("B ");
+				else if (nm->n_sect == 11)
+					ft_printf("D ");
+				else if (nm->n_sect == 1)
+					ft_printf("T ");
+				else
+					ft_printf("S ");
+			}
+		}
+		else if (print_ext(nm) == -1)
+			return ;
+		ft_printf("%s\n", nm->n_strx);
+		lst = lst->next;
+	}
+}
+
+int			compare_ascii(t_list *a, t_list *b)
+{
+	return (ft_strcmp(((t_nm *)a->content)->n_strx,
+				((t_nm *)b->content)->n_strx));
+}
+
+int			ft_sort_root(t_list **head, int flag)
+{
+	if (flag == 0)
+		*head = mergesorti(*head, compare_ascii);
+	return (1);
+}
+
 int				symtab_64(t_symtab_command *sym, char *ptr)
 {
 	unsigned int	i;
 	char			*strtable;
 	t_nlist_64		*el;
+	t_list			*lst_begin;
+	t_list			*lst;
+	t_nm			*nm;
 
 	el = (void *)ptr + sym->symoff;
 	strtable = (void *)ptr + sym->stroff;
+	lst_begin = NULL;
+	lst = NULL;
 	i = 0;
 	while (sym->nsyms > i)
 	{
-//		ft_printf("name = %s    -  type = %d   - sect = %d    -  desc = %d   -  value = %llx\n\n\n", strtable + el[i].n_un.n_strx, el[i].n_type, el[i].n_sect, el[i].n_desc, el[i].n_value);
-			if (!el[i].n_value && ft_strlen(strtable + el[i].n_un.n_strx) > 0 && (strtable + el[i].n_un.n_strx)[0] != '/' &&  el[i].n_type < 100 && el[i].n_type != 36 && el[i].n_type != 32)
-			{
-				ft_printf("\t\t %d %s\n", el[i].n_sect, strtable + el[i].n_un.n_strx);
-			}
-			else if (ft_strlen(strtable + el[i].n_un.n_strx) > 0 && (strtable + el[i].n_un.n_strx)[0] != '/' && el[i].n_type < 100 && el[i].n_type != 36 && el[i].n_type != 32)
-			{
-				ft_printf("%0.16llx %d %s\n", el[i].n_value, el[i].n_sect, strtable + el[i].n_un.n_strx);
-			}
+		nm = make_node(el[i].n_value, el[i].n_sect, strtable + el[i].n_un.n_strx, el[i].n_type);
+		if (!lst)
+		{
+			if (!(lst = ft_list_create((char *)nm, sizeof(nm))))
+				return (-1);
+			lst_begin = lst;
+		}
+		else
+		{
+			if (!(ft_list_append(&lst_begin, (char *)nm, sizeof(nm))))
+				return (-1);
+		}
 		i++;
 	}
+	ft_sort_root(&lst_begin, 0);
+	print_output(lst_begin);
 	return (0);
 }
+//		if (!el[i].n_value && ft_strlen(strtable + el[i].n_un.n_strx) > 0 && (strtable + el[i].n_un.n_strx)[0] != '/' &&  el[i].n_type < 100 && el[i].n_type != 36 && el[i].n_type != 32)
+//		{
+//			ft_printf("\t\t %d %s\n", el[i].n_sect, strtable + el[i].n_un.n_strx);
+//		}
+//		else if (ft_strlen(strtable + el[i].n_un.n_strx) > 0 && (strtable + el[i].n_un.n_strx)[0] != '/' && el[i].n_type < 100 && el[i].n_type != 36 && el[i].n_type != 32)
+//		{
+//			ft_printf("%0.16llx %d %s\n", el[i].n_value, el[i].n_sect, strtable + el[i].n_un.n_strx);
+//		}
 
 int			handle_64(char *ptr)
 {
