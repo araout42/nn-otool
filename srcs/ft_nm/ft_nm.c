@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 04:29:16 by araout            #+#    #+#             */
-/*   Updated: 2020/10/10 17:13:55 by araout           ###   ########.fr       */
+/*   Updated: 2020/10/10 20:38:58 by araout           ###   ########.fr       */
 
 /*                                                                            */
 /* ************************************************************************** */
@@ -73,40 +73,33 @@ int			print_ext(t_nm *nm)
 	return (0);
 }
 
-void			print_output(t_list *lst)
+void			print_output(t_nm *nm)
 {
-	t_nm		*nm;
-
-	while (lst != NULL)
+	if (ft_strlen(nm->n_strx) == 0)
+		return ;
+	if (nm->n_type == N_UNDF && nm->n_ext)
+		ft_printf("                 U %s\n", nm->n_strx);
+	else if (nm->n_type == N_ABS || nm->n_type == N_SECT || nm->n_type == N_INDR)
+		ft_printf("%0.16llx ", nm->n_value);
+	if (nm->n_type == N_ABS)
+		ft_printf("A ");
+	else if (nm->n_type == N_INDR)
+		ft_printf("I ");
+	else if (nm->n_type == N_SECT && nm->n_ext)
 	{
-		nm = (t_nm *)lst->content;
-		if (nm->n_type == N_UNDF)
-			ft_printf("                  U ");
-		else if (nm->n_type == N_ABS || nm->n_type == N_SECT || nm->n_type == N_INDR)
-			ft_printf("%0.16llx ", nm->n_value);
-		if (nm->n_ext)
-		{
-			if (nm->n_type == N_ABS)
-				ft_printf("A ");
-			else if (nm->n_type == N_INDR)
-				ft_printf("I ");
-			else if (nm->n_type == N_SECT)
-			{
-				if (nm->n_sect == 12)
-					ft_printf("B ");
-				else if (nm->n_sect == 11)
-					ft_printf("D ");
-				else if (nm->n_sect == 1)
-					ft_printf("T ");
-				else
-					ft_printf("S ");
-			}
-		}
-		else if (print_ext(nm) == -1)
-			return ;
-		ft_printf("%s\n", nm->n_strx);
-		lst = lst->next;
+		if (nm->n_sect == 12)
+			ft_printf("B ");
+		else if (nm->n_sect == 10)
+			ft_printf("D ");
+		else if (nm->n_sect == 1)
+			ft_printf("T ");
+		else
+			ft_printf("S ");
 	}
+	else if (print_ext(nm) == -1)
+		return ;
+	//ft_printf("%s ------- %d\n", nm->n_strx, nm->n_sect);
+	ft_printf("%s\n", nm->n_strx);
 }
 
 int			compare_ascii(t_list *a, t_list *b)
@@ -146,14 +139,18 @@ int				symtab_64(t_symtab_command *sym, char *ptr)
 			lst_begin = lst;
 		}
 		else
-		{
 			if (!(ft_list_append(&lst_begin, (char *)nm, sizeof(nm))))
 				return (-1);
-		}
 		i++;
 	}
 	ft_sort_root(&lst_begin, 0);
-	print_output(lst_begin);
+	lst = lst_begin;
+	while(lst)
+	{
+		nm = (t_nm *)lst->content;
+		print_output(nm);
+		lst = lst->next;
+	}
 	return (0);
 }
 //		if (!el[i].n_value && ft_strlen(strtable + el[i].n_un.n_strx) > 0 && (strtable + el[i].n_un.n_strx)[0] != '/' &&  el[i].n_type < 100 && el[i].n_type != 36 && el[i].n_type != 32)
@@ -164,6 +161,13 @@ int				symtab_64(t_symtab_command *sym, char *ptr)
 //		{
 //			ft_printf("%0.16llx %d %s\n", el[i].n_value, el[i].n_sect, strtable + el[i].n_un.n_strx);
 //		}
+
+void		parse_section(t_load_command *lc)
+{
+	(void)lc;
+
+	return ;
+}
 
 int			handle_64(char *ptr)
 {
@@ -195,6 +199,7 @@ int			nm(char *ptr)
 	unsigned int magic_number;
 
 	magic_number = *(int *)ptr;
+	printf("%x\n", magic_number);
 	if (magic_number == MH_MAGIC_64)
 	{
 		handle_64(ptr);
