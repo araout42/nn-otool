@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 04:29:16 by araout            #+#    #+#             */
-/*   Updated: 2020/10/10 20:38:58 by araout           ###   ########.fr       */
+/*   Updated: 2020/10/11 17:15:15 by araout           ###   ########.fr       */
 
 /*                                                                            */
 /* ************************************************************************** */
@@ -59,11 +59,11 @@ int			print_ext(t_nm *nm)
 		ft_printf("i ");
 	else if (nm->n_type == N_SECT)
 	{
-		if (nm->n_sect == 12)
+		if (nm->n_sect  == sections.bss)
 			ft_printf("b ");
-		else if (nm->n_sect == 11)
+		else if (nm->n_sect == sections.data)
 			ft_printf("d ");
-		else if (nm->n_sect == 1)
+		else if (nm->n_sect == sections.text)
 			ft_printf("t ");
 		else
 			ft_printf("s ");
@@ -87,11 +87,11 @@ void			print_output(t_nm *nm)
 		ft_printf("I ");
 	else if (nm->n_type == N_SECT && nm->n_ext)
 	{
-		if (nm->n_sect == 12)
+		if (nm->n_sect == sections.bss)
 			ft_printf("B ");
-		else if (nm->n_sect == 10)
+		else if (nm->n_sect == sections.data)
 			ft_printf("D ");
-		else if (nm->n_sect == 1)
+		else if (nm->n_sect == sections.text)
 			ft_printf("T ");
 		else
 			ft_printf("S ");
@@ -153,20 +153,32 @@ int				symtab_64(t_symtab_command *sym, char *ptr)
 	}
 	return (0);
 }
-//		if (!el[i].n_value && ft_strlen(strtable + el[i].n_un.n_strx) > 0 && (strtable + el[i].n_un.n_strx)[0] != '/' &&  el[i].n_type < 100 && el[i].n_type != 36 && el[i].n_type != 32)
-//		{
-//			ft_printf("\t\t %d %s\n", el[i].n_sect, strtable + el[i].n_un.n_strx);
-//		}
-//		else if (ft_strlen(strtable + el[i].n_un.n_strx) > 0 && (strtable + el[i].n_un.n_strx)[0] != '/' && el[i].n_type < 100 && el[i].n_type != 36 && el[i].n_type != 32)
-//		{
-//			ft_printf("%0.16llx %d %s\n", el[i].n_value, el[i].n_sect, strtable + el[i].n_un.n_strx);
-//		}
 
-void		parse_section(t_load_command *lc)
+static void		segment_64(t_load_command *lc)
 {
-	(void)lc;
+	t_segment_command_64	*seg;
+	t_section_64			*sect;
+	int						i;
+	int						nseg;
 
-	return ;
+	seg = (struct segment_command_64 *)lc;
+	sect = (struct section_64 *)((void*)seg + sizeof(*seg));
+	nseg = seg->nsects;
+	i = -1;
+	while (++i < nseg)
+	{
+		if (!ft_strcmp(sect->sectname, SECT_TEXT)
+				&& !ft_strcmp(sect->segname, SEG_TEXT))
+			sections.text = sections.index + 1;
+		else if (!ft_strcmp(sect->sectname, SECT_DATA)
+				&& !ft_strcmp(sect->segname, SEG_DATA))
+			sections.data = sections.index + 1;
+		else if (!ft_strcmp(sect->sectname, SECT_BSS)
+				&& !ft_strcmp(sect->segname, SEG_DATA))
+			sections.bss = sections.index + 1;
+		sect = sect + 1;
+		sections.index++;
+	}
 }
 
 int			handle_64(char *ptr)
@@ -176,18 +188,17 @@ int			handle_64(char *ptr)
 	t_load_command			*lc;
 	int						i;
 
+
 	i = -1;
 	header = (t_mach_header_64 *)ptr;
 	ncmds = header->ncmds;
 	lc = (void *)ptr + sizeof(t_mach_header_64);
 	while (++i < ncmds)
 	{
+		if (lc && lc->cmd == LC_SEGMENT_64)
+			segment_64((t_load_command *)lc);
 		if (lc && lc->cmd == LC_SYMTAB)
-		{
 			symtab_64((t_symtab_command *)lc, ptr);
-			break;
-		}
-
 		lc = (void *)lc + lc->cmdsize;
 	}
 
@@ -199,15 +210,10 @@ int			nm(char *ptr)
 	unsigned int magic_number;
 
 	magic_number = *(int *)ptr;
-	printf("%x\n", magic_number);
 	if (magic_number == MH_MAGIC_64)
-	{
 		handle_64(ptr);
-	}
 	if (magic_number == MH_MAGIC)
-	{
 		handle_32(ptr);
-	}
 	return (ERR_FILE_FORMAT);
 }
 int			handle_file(char *filename)

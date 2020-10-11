@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 04:32:17 by araout            #+#    #+#             */
-/*   Updated: 2020/10/10 20:33:04 by araout           ###   ########.fr       */
+/*   Updated: 2020/10/11 17:06:28 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,21 @@
 typedef struct		s_nm
 {
 	uint64_t		n_value;
-	int				n_sect;
+	uint32_t		n_sect;
 	char			*n_strx;
 	int				n_type;
 	int				n_ext;
 }					t_nm;
+
+typedef struct		s_sect
+{
+	uint32_t		index;
+	uint32_t		text;
+	uint32_t		data;
+	uint32_t		bss;
+}					t_sect;
+
+t_sect				sections;
 
 typedef struct		nlist_64 t_nlist_64;
 typedef struct		nlist t_nlist;
