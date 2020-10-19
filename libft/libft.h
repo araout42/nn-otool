@@ -6,15 +6,15 @@
 /*   By: kicausse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/06 07:09:22 by kicausse          #+#    #+#             */
-/*   Updated: 2020/10/10 14:52:45 by araout           ###   ########.fr       */
+/*   Updated: 2020/10/12 14:05:20 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 # include <string.h>
-# define COLOR_RESET ("\033[0m")
-# define BASE_HEX ("0123456789ABCDEF")
+# define COLOR_RESET "\033[0m"
+# define BASE_HEX "0123456789ABCDEF"
 # undef tab
 
 /*

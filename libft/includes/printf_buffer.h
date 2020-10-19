@@ -6,13 +6,13 @@
 /*   By: kicausse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/04 00:26:23 by kicausse          #+#    #+#             */
-/*   Updated: 2019/03/04 00:26:23 by kicausse         ###   ########.fr       */
+/*   Updated: 2020/10/12 13:59:23 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PRINTF_BUFFER_H
 # define PRINTF_BUFFER_H
-# define PRINTF_BUFSIZE (2048)
+# define PRINTF_BUFSIZE 2048
 # include <string.h>
 
 void	write_buffer(int fd, char *str, int len);

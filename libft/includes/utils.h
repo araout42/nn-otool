@@ -6,13 +6,13 @@
 /*   By: kicausse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/03 22:46:47 by kicausse          #+#    #+#             */
-/*   Updated: 2018/12/03 22:46:48 by kicausse         ###   ########.fr       */
+/*   Updated: 2020/10/12 14:01:52 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UTILS_H
 # define UTILS_H
-# define OPTIONS ("cCsSpdDioOuUxXfFbr")
+# define OPTIONS "cCsSpdDioOuUxXfFbr"
 # include "specifiers.h"
 
 int		is_option(char c);

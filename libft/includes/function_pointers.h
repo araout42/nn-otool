@@ -6,7 +6,7 @@
 /*   By: kicausse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/03 22:23:27 by kicausse          #+#    #+#             */
-/*   Updated: 2018/12/03 22:23:27 by kicausse         ###   ########.fr       */
+/*   Updated: 2020/10/12 14:01:09 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 # include <stdarg.h>
 # include "specifiers.h"
 
-# define SPECIFIER_COUNT (19)
-# define NBR_SPECIFIER_COUNT (3)
-# define BASE_SPECIFIER_COUNT (7)
+# define SPECIFIER_COUNT 19
+# define NBR_SPECIFIER_COUNT 3
+# define BASE_SPECIFIER_COUNT 7
 
 typedef struct			s_func
 {

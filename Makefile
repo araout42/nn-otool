@@ -6,14 +6,17 @@
 #    By: araout <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/01 04:38:21 by araout            #+#    #+#              #
-#    Updated: 2020/10/08 17:18:18 by araout           ###   ########.fr        #
+#    Updated: 2020/10/12 18:42:52 by araout           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NM = ft_nm
 OTOOL = ft_otool
 
-NM_SRC = srcs/ft_nm/ft_nm.c #srcs/ft_nm/get_args.c
+NM_SRC = srcs/ft_nm/ft_nm.c srcs/ft_nm/manage_lst.c srcs/ft_nm/segment_64.c \
+		 srcs/ft_nm/symtab64.c srcs/ft_nm/ft_nm32.c srcs/ft_nm/print_output.c \
+		 srcs/ft_nm/ft_nm_fat32.c srcs/ft_nm/ft_nm_fat64.c srcs/ft_nm/endian.c \
+
 OTOOL_SRC = srcs/ft_otool/ft_otool.c
 
 NM_OBJ = $(NM_SRC:.c=.o)

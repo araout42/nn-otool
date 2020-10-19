@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   merge_sort_lst.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: araout </var/mail/araout>                  +#+  +:+       +#+        */
+/*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/10 14:44:30 by araout            #+#    #+#             */
-/*   Updated: 2020/10/10 14:52:53 by araout           ###   ########.fr       */
+/*   Created: 2020/10/12 14:02:39 by araout            #+#    #+#             */
+/*   Updated: 2020/10/12 14:04:51 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list*		merge(t_list *a, t_list *b, int (*cmp)(t_list *a, t_list *b),
+t_list		*merge(t_list *a, t_list *b, int (*cmp)(t_list *a, t_list *b),
 	t_list *head)
 {
 	t_list		**r;
@@ -42,13 +42,13 @@ t_list*		merge(t_list *a, t_list *b, int (*cmp)(t_list *a, t_list *b),
 	return (head);
 }
 
-t_list*		mergesorti(t_list *p, int (*cmp)(t_list *a, t_list *b))
+t_list		*mergesorti(t_list *p, int (*cmp)(t_list *a, t_list *b))
 {
 	t_list*a;
 	t_list*b;
 	t_list*last;
 
-	b			 = p;
+	b = p;
 	a = b;
 	last = NULL;
 	while (a && a->next)
@@ -62,4 +62,3 @@ t_list*		mergesorti(t_list *p, int (*cmp)(t_list *a, t_list *b))
 	last->next = NULL;
 	return (merge(mergesorti(p, cmp), mergesorti(b, cmp), cmp, NULL));
 }
-
