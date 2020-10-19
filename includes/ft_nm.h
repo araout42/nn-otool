@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 04:32:17 by araout            #+#    #+#             */
-/*   Updated: 2020/10/12 18:52:55 by araout           ###   ########.fr       */
+/*   Updated: 2020/10/19 20:33:34 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # define FLAG_Q 2
 # define FLAG_R 4
 # define FLAG_S 8
+# define AR_MAGIC 0x72613c21
+# define AR_CIGAM 0x213c6172
 # include <unistd.h>
 # include <stdio.h>
 # include <sys/mman.h>
@@ -34,6 +36,7 @@
 # include <mach-o/loader.h>
 # include <mach-o/nlist.h>
 # include <mach-o/fat.h>
+# include <ar.h>
 
 typedef struct							s_nm
 {
@@ -67,7 +70,7 @@ typedef struct mach_header_64			t_mach_header_64;
 typedef struct symtab_command			t_symtab_command;
 typedef struct symtab_command_64		t_symtab_command_64;
 typedef struct fat_header				t_fat_header;
-void									print_output(t_nm *nm);
+void									print_output(t_nm *nm, int flag);
 int										handle_32(char *ptr);
 int										symtab_64(t_symtab_command *sym,
 		char *ptr, t_list *lst);
@@ -83,4 +86,7 @@ int										handle_fat_64(char *ptr);
 uint32_t								swap_uint32(uint32_t x);
 uint64_t								swap_uint64(uint64_t x);
 int										nm(char *ptr);
+t_nm*									make_node(uint64_t n_value, int n_sect,
+		char *n_strx, int type);
+int										handle_archive(char *ptr);
 #endif

@@ -1,5 +1,5 @@
 #!/bin/sh
-for file in $(find /usr/bin); do
+for file in $(find /usr/share); do
 	echo $file;
 	./ft_nm $file > /tmp/a;
 	nm $file >/tmp/b 2>/dev/null;

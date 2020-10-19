@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 17:43:55 by araout            #+#    #+#             */
-/*   Updated: 2020/10/12 17:59:44 by araout           ###   ########.fr       */
+/*   Updated: 2020/10/19 18:55:49 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int				symtab_64(t_symtab_command *sym, char *ptr, t_list *lst)
 	while (lst)
 	{
 		nm = (t_nm *)lst->content;
-		print_output(nm);
+		print_output(nm, 0);
 		lst = lst->next;
 	}
 	return (0);

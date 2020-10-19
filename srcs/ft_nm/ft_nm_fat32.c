@@ -6,11 +6,21 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 18:16:50 by araout            #+#    #+#             */
-/*   Updated: 2020/10/12 19:02:31 by araout           ###   ########.fr       */
+/*   Updated: 2020/10/19 19:42:22 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_nm.h"
+
+static int	is_hostarch(cpu_type_t type)
+
+{
+	if ((type == CPU_TYPE_X86_64) && (sizeof(void *) == 8))
+		return (1);
+	if ((type == CPU_TYPE_I386) && (sizeof(void *) == 4))
+		return (1);
+	return (0);
+}
 
 int			handle_fat_32(char *ptr)
 {
@@ -25,8 +35,10 @@ int			handle_fat_32(char *ptr)
 	i = -1;
 	while (++i < nfat)
 	{
+		if (nfat > 1 && !i && is_hostarch(swap_uint32(arch[i + 1].cputype)))
+			continue ;
 		nm(ptr + swap_uint32(arch[i].offset));
-		if (swap_uint32(arch[i].cputype))
+		if (is_hostarch(swap_uint32(arch[i].cputype)))
 			return (EXIT_SUCCESS);
 	}
 	return (EXIT_SUCCESS);

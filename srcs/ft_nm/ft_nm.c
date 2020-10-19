@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 04:29:16 by araout            #+#    #+#             */
-/*   Updated: 2020/10/12 19:31:48 by araout           ###   ########.fr       */
+/*   Updated: 2020/10/19 20:31:34 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,17 @@ int				nm(char *ptr)
 	unsigned int magic_number;
 
 	magic_number = *(int *)ptr;
-	printf("%x\n", magic_number);
-	if (magic_number == MH_MAGIC_64 || magic_number == MH_CIGAM_64)
-		handle_64(ptr);
-	if (magic_number == MH_MAGIC || magic_number == MH_CIGAM)
-		handle_32(ptr);
-	if (magic_number == FAT_CIGAM || magic_number == FAT_MAGIC)
-		handle_fat_32(ptr);
-	if (magic_number == FAT_CIGAM_64 || magic_number == FAT_MAGIC_64)
-		handle_fat_64(ptr);
+//	printf("%x\n", magic_number);
+	if (magic_number == AR_MAGIC || magic_number == AR_CIGAM)
+		return (handle_archive(ptr));
+	else if(magic_number == MH_MAGIC || magic_number == MH_CIGAM)
+		return (handle_32(ptr));
+	else if (magic_number == MH_MAGIC_64 || magic_number == MH_CIGAM_64)
+		return (handle_64(ptr));
+	else if (magic_number == FAT_CIGAM_64 || magic_number == FAT_MAGIC_64)
+		return (handle_fat_64(ptr));
+	else if (magic_number == FAT_CIGAM || magic_number == FAT_MAGIC)
+		return (handle_fat_32(ptr));
 	return (ERR_FILE_FORMAT);
 }
 
