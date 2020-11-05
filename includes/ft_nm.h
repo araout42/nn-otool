@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 04:32:17 by araout            #+#    #+#             */
-/*   Updated: 2020/10/19 20:33:34 by araout           ###   ########.fr       */
+/*   Updated: 2020/11/01 20:52:27 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ typedef struct mach_header_64			t_mach_header_64;
 typedef struct symtab_command			t_symtab_command;
 typedef struct symtab_command_64		t_symtab_command_64;
 typedef struct fat_header				t_fat_header;
+typedef struct ar_hdr					t_ar_hdr;
 void									print_output(t_nm *nm, int flag);
 int										handle_32(char *ptr);
 int										symtab_64(t_symtab_command *sym,
@@ -78,15 +79,16 @@ void									segment_64(t_load_command *lc);
 t_list									*build_lst(t_symtab_command *sym,
 		char *strtbl, t_nlist_64 *el);
 int										ft_sort_root(t_list **head, int flag);
-int										handle_64(char *ptr);
+int										handle_64(char *ptr, off_t size);
 int										handle_file(char *filename);
 void									print_error(int err, char *f);
-int										handle_fat_32(char *ptr);
-int										handle_fat_64(char *ptr);
+int										handle_fat_32(char *ptr, off_t size, char *filename);
+int										handle_fat_64(char *ptr, off_t size, char *filename);
 uint32_t								swap_uint32(uint32_t x);
 uint64_t								swap_uint64(uint64_t x);
-int										nm(char *ptr);
+int										nm(char *ptr, off_t size, char *filename);
 t_nm*									make_node(uint64_t n_value, int n_sect,
 		char *n_strx, int type);
-int										handle_archive(char *ptr);
+int										handle_archive(void *ptr, off_t size,
+		char *filename);
 #endif

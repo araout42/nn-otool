@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 17:44:32 by araout            #+#    #+#             */
-/*   Updated: 2020/10/12 17:58:39 by araout           ###   ########.fr       */
+/*   Updated: 2020/11/01 20:54:13 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_nm			*make_node(uint64_t n_value, int n_sect, char *n_strx, int type)
 		return (NULL);
 	nm->n_value = n_value;
 	nm->n_sect = n_sect;
-	nm->n_strx = n_strx;
+	nm->n_strx = ft_strdup(n_strx);
 	nm->n_type = type & N_TYPE;
 	nm->n_ext = type & N_EXT;
 	return (nm);
@@ -47,6 +47,7 @@ t_list			*build_lst(t_symtab_command *sym, char *strtbl, t_nlist_64 *el)
 	unsigned int	i;
 
 	i = 0;
+	lst = NULL;
 	while (sym->nsyms > i)
 	{
 		nm = make_node(el[i].n_value, el[i].n_sect,

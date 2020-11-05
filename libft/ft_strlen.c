@@ -6,11 +6,12 @@
 /*   By: kicausse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/06 07:09:22 by kicausse          #+#    #+#             */
-/*   Updated: 2018/11/06 07:09:23 by kicausse         ###   ########.fr       */
+/*   Updated: 2020/11/01 19:29:08 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <unistd.h>
 
 size_t			ft_strlen(const char *s)
 {

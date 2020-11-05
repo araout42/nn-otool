@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 18:16:50 by araout            #+#    #+#             */
-/*   Updated: 2020/10/19 19:42:22 by araout           ###   ########.fr       */
+/*   Updated: 2020/11/01 18:31:24 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	is_hostarch(cpu_type_t type)
 	return (0);
 }
 
-int			handle_fat_32(char *ptr)
+int			handle_fat_32(char *ptr, off_t size, char *filename)
 {
 	uint32_t			nfat;
 	uint32_t			i;
@@ -37,7 +37,7 @@ int			handle_fat_32(char *ptr)
 	{
 		if (nfat > 1 && !i && is_hostarch(swap_uint32(arch[i + 1].cputype)))
 			continue ;
-		nm(ptr + swap_uint32(arch[i].offset));
+		nm(ptr + swap_uint32(arch[i].offset), size, filename );
 		if (is_hostarch(swap_uint32(arch[i].cputype)))
 			return (EXIT_SUCCESS);
 	}

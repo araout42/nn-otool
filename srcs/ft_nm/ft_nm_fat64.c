@@ -6,13 +6,13 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 18:18:06 by araout            #+#    #+#             */
-/*   Updated: 2020/10/12 19:03:03 by araout           ###   ########.fr       */
+/*   Updated: 2020/11/01 18:32:08 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_nm.h>
 
-int			handle_fat_64(char *ptr)
+int			handle_fat_64(char *ptr, off_t size, char *filename)
 {
 	uint32_t			nfat;
 	uint32_t			i;
@@ -25,7 +25,7 @@ int			handle_fat_64(char *ptr)
 	i = -1;
 	while (++i < nfat)
 	{
-		nm(ptr + swap_uint32(arch[i].offset));
+		nm(ptr + swap_uint64(arch[i].offset), size, filename);
 		if (swap_uint32(arch[i].cputype))
 			return (EXIT_SUCCESS);
 	}

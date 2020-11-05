@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 04:29:16 by araout            #+#    #+#             */
-/*   Updated: 2020/10/19 20:31:34 by araout           ###   ########.fr       */
+/*   Updated: 2020/11/02 20:41:29 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,22 +37,30 @@ int				main(int ac, char **av)
 	return (0);
 }
 
-int				nm(char *ptr)
+void			reset_section(void)
+{
+	g_sections.index = 0;
+	g_sections.bss = 0;
+	g_sections.data = 0;
+	g_sections.text = 0;
+}
+
+int				nm(char *ptr, off_t size, char *filename)
 {
 	unsigned int magic_number;
 
 	magic_number = *(int *)ptr;
-//	printf("%x\n", magic_number);
+	reset_section();
 	if (magic_number == AR_MAGIC || magic_number == AR_CIGAM)
-		return (handle_archive(ptr));
+		return (handle_archive(ptr, size, filename));
 	else if(magic_number == MH_MAGIC || magic_number == MH_CIGAM)
 		return (handle_32(ptr));
 	else if (magic_number == MH_MAGIC_64 || magic_number == MH_CIGAM_64)
-		return (handle_64(ptr));
+		return (handle_64(ptr, size));
 	else if (magic_number == FAT_CIGAM_64 || magic_number == FAT_MAGIC_64)
-		return (handle_fat_64(ptr));
+		return (handle_fat_64(ptr, size, filename));
 	else if (magic_number == FAT_CIGAM || magic_number == FAT_MAGIC)
-		return (handle_fat_32(ptr));
+		return (handle_fat_32(ptr, size, filename));
 	return (ERR_FILE_FORMAT);
 }
 
@@ -67,10 +75,11 @@ int				handle_file(char *filename)
 		return (ERR_OPEN);
 	if (fstat(fd, &buf) < 0)
 		return (ERR_FSTAT);
-	if ((ptr = mmap(0, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0))
+	if ((ptr = mmap(0, buf.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0))
 		== MAP_FAILED)
 		return (ERR_MMAP);
-	nm_ret = nm(ptr);
+	ptr[buf.st_size -1] = '\0';
+	nm_ret = nm(ptr, buf.st_size, filename);
 	if (munmap(ptr, buf.st_size) < 0)
 		return (ERR_MUNMAP);
 	close(fd);
