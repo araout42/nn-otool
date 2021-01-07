@@ -44,6 +44,7 @@ int			handle_archive(void *ptr, off_t s, char *filename)
 	struct ar_hdr	*header;
 	char			*str;
 	size_t			len;
+	int				ret;
 
 	ptr += SARMAG;
 	header = (						struct ar_hdr *)ptr;
@@ -52,16 +53,20 @@ int			handle_archive(void *ptr, off_t s, char *filename)
 	{
 		header = (struct ar_hdr *)ptr;
 		if (ft_atoi(header->ar_size) <= 0)
-			return (EXIT_FAILURE);
+			return (ERR_FILE_CORRUPT);
 		str = ptr + sizeof(struct ar_hdr);
 		if (ptr + (ft_atoi(header->ar_size) + sizeof(struct ar_hdr)) > ptr + s)
-			return (EXIT_FAILURE);
+			return (ERR_FILE_CORRUPT);
 		if (ft_strcmp(str, "Makefile"))
 		ft_printf("\n%s(%s):\n", filename, str);
 		len = ft_strlen(str);
 		while (!str[len++])
 			;
-		nm(ptr + sizeof(struct ar_hdr) + len - 1, s, NULL);
+		if ((ret = nm(ptr + sizeof(struct ar_hdr) + len - 1, s, NULL)) != 0)
+		{
+			printf("re = %d\n", ret);
+			return (ret);
+		}
 		ptr += ft_atoi(header->ar_size) + sizeof(struct ar_hdr);
 	}
 	return (EXIT_SUCCESS);

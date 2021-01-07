@@ -6,7 +6,7 @@
 #    By: araout <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/01 04:38:21 by araout            #+#    #+#              #
-#    Updated: 2020/11/01 19:25:59 by araout           ###   ########.fr        #
+#    Updated: 2021/01/07 14:21:23 by araout           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,9 +16,11 @@ OTOOL = ft_otool
 NM_SRC = srcs/ft_nm/ft_nm.c srcs/ft_nm/manage_lst.c srcs/ft_nm/segment_64.c \
 		 srcs/ft_nm/symtab64.c srcs/ft_nm/ft_nm32.c srcs/ft_nm/print_output.c \
 		 srcs/ft_nm/ft_nm_fat32.c srcs/ft_nm/ft_nm_fat64.c srcs/ft_nm/endian.c \
-		 srcs/ft_nm/ft_nm_ar.c
+		 srcs/ft_nm/ft_nm_ar.c srcs/ft_nm/check.c\
 
-OTOOL_SRC = srcs/ft_otool/ft_otool.c
+OTOOL_SRC = srcs/ft_otool/ft_otool.c srcs/ft_otool/otool64.c srcs/ft_otool/check.c \
+			srcs/ft_otool/endian.c
+
 
 NM_OBJ = $(NM_SRC:.c=.o)
 OTOOL_OBJ = $(OTOOL_SRC:.c=.o)

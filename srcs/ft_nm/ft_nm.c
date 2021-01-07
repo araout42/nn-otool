@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 04:29:16 by araout            #+#    #+#             */
-/*   Updated: 2020/11/02 20:41:29 by araout           ###   ########.fr       */
+/*   Updated: 2021/01/07 15:18:23 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,12 @@ int				main(int ac, char **av)
 {
 	int		i;
 	int		res;
+	int		flag;
 
 	i = 0;
 	if (ac == 1)
 	{
-		if ((res = handle_file("./a.out")) != 0)
+		if ((res = handle_file("./a.out", 0)) != 0)
 		{
 			print_error(res, "./a.out");
 			return (1);
@@ -30,7 +31,9 @@ int				main(int ac, char **av)
 	{
 		while (ac-- > 1)
 		{
-			if ((res = handle_file(av[++i])) != 0)
+			if (ac > 1)
+				flag = 1;
+			if ((res = handle_file(av[++i], flag)) != 0)
 				print_error(res, av[i]);
 		}
 	}
@@ -43,6 +46,8 @@ void			reset_section(void)
 	g_sections.bss = 0;
 	g_sections.data = 0;
 	g_sections.text = 0;
+	g_sections.swap = 0;
+	g_sections.is_set = 0;
 }
 
 int				nm(char *ptr, off_t size, char *filename)
@@ -54,7 +59,7 @@ int				nm(char *ptr, off_t size, char *filename)
 	if (magic_number == AR_MAGIC || magic_number == AR_CIGAM)
 		return (handle_archive(ptr, size, filename));
 	else if(magic_number == MH_MAGIC || magic_number == MH_CIGAM)
-		return (handle_32(ptr));
+		return (handle_32(ptr, size));
 	else if (magic_number == MH_MAGIC_64 || magic_number == MH_CIGAM_64)
 		return (handle_64(ptr, size));
 	else if (magic_number == FAT_CIGAM_64 || magic_number == FAT_MAGIC_64)
@@ -64,7 +69,7 @@ int				nm(char *ptr, off_t size, char *filename)
 	return (ERR_FILE_FORMAT);
 }
 
-int				handle_file(char *filename)
+int				handle_file(char *filename,int flag)
 {
 	int				fd;
 	char			*ptr;
@@ -79,38 +84,41 @@ int				handle_file(char *filename)
 		== MAP_FAILED)
 		return (ERR_MMAP);
 	ptr[buf.st_size -1] = '\0';
+	if (flag == 1)
+		ft_printf("\n%s:\n", filename);
 	nm_ret = nm(ptr, buf.st_size, filename);
 	if (munmap(ptr, buf.st_size) < 0)
 		return (ERR_MUNMAP);
 	close(fd);
-	if (nm_ret == ERR_FILE_FORMAT)
-		return (ERR_FILE_FORMAT);
-	return (0);
+	return (nm_ret);
 }
 
 void			print_error(int err, char *f)
 {
-	(void)err;
+	if (err == ERR_FILE_CORRUPT)
+		ft_printf_fd(2, "ft_nm: error: %s : file is corrputed.\n", f);
+	else if (err == ERR_FILE_FORMAT)
+		ft_printf_fd(2, "ft_nm: error: %s : file format unrecognized\n", f);
 	if (errno == EPERM)
-		ft_printf("ft_nm: error: %s : Operation not permitted.\n", f);
+		ft_printf_fd(2, "ft_nm: error: %s : Operation not permitted.\n", f);
 	else if (errno == ENOENT)
-		ft_printf("ft_nm: error: %s : No such file or directory.\n", f);
+		ft_printf_fd(2, "ft_nm: error: %s : No such file or directory.\n", f);
 	else if (errno == EACCES)
-		ft_printf("ft_nm: errror: %s : Permission denied.\n", f);
+		ft_printf_fd(2, "ft_nm: errror: %s : Permission denied.\n", f);
 	else if (errno == EISDIR)
-		ft_printf("ft_nm: error: %s : Is a directory.\n", f);
+		ft_printf_fd(2, "ft_nm: error: %s : Is a directory.\n", f);
 	else if (errno == ENFILE || errno == EMFILE)
-		ft_printf("ft_nm: error: %s : too many open files.\n", f);
+		ft_printf_fd(2, "ft_nm: error: %s : too many open files.\n", f);
 	else if (errno == EFBIG)
-		ft_printf("ft_nm: error: %s : File too large.\n", f);
+		ft_printf_fd(2, "ft_nm: error: %s : File too large.\n", f);
 	else if (errno == EROFS)
-		ft_printf("ft_nm: error: %s : Read-only file system.\n", f);
+		ft_printf_fd(2, "ft_nm: error: %s : Read-only file system.\n", f);
 	else if (errno == EINTR)
-		ft_printf("ft_nm: error:  Interrupted system call\n");
+		ft_printf_fd(2, "ft_nm: error:  Interrupted system call\n");
 	else if (errno == ENOSPC)
-		ft_printf("ft_nm: error: No space left on device.\n");
+		ft_printf_fd(2, "ft_nm: error: No space left on device.\n");
 	else if (errno == ENOMEM)
-		ft_printf("ft_nm: error: Cannot allocate memory.\n");
+		ft_printf_fd(2, "ft_nm: error: Cannot allocate memory.\n");
 	else if (errno == ENAMETOOLONG)
-		ft_printf("ft_nm: error: %s file name too long", f);
+		ft_printf_fd(2, "ft_nm: error: %s file name too long",f);
 }

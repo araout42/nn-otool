@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   segment_64.c                                       :+:      :+:    :+:   */
+/*   otool64.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/12 17:42:38 by araout            #+#    #+#             */
-/*   Updated: 2021/01/07 15:13:30 by araout           ###   ########.fr       */
+/*   Created: 2021/01/07 14:03:38 by araout            #+#    #+#             */
+/*   Updated: 2021/01/07 14:25:53 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <ft_nm.h>
+#include <ft_otool.h>
 
 void		segment_64(t_load_command *lc)
 {
@@ -34,4 +34,30 @@ void		segment_64(t_load_command *lc)
 			g_sections.bss = g_sections.index + 1;
 		g_sections.index++;
 	}
+}
+
+int handle_64(char *ptr, off_t size)
+{
+	t_mach_header_64	*header;
+	t_load_command		*lc;
+	uint64_t			ncmds;
+
+	header = (t_mach_header_64 *)ptr;
+	if (header->magic == MH_CIGAM)
+		g_sections.swap = 1;
+	else
+		g_sections.swap = 0;
+	if (check_corrupt((void *)header+1, ptr, size))
+		return (ERR_FILE_CORRUPT);
+	ncmds = SWAPIF(header->ncmds);
+	lc = (void *)ptr + sizeof(t_mach_header_64);
+	if (check_corrupt((void*)lc+1, ptr, size))
+		return (ERR_FILE_CORRUPT);
+	while (--ncmds)
+	{
+		if (check_corrupt((void*)lc+1, ptr, size))
+			return (ERR_FILE_CORRUPT);
+		lc = (void *)lc + (SWAPIF(lc->cmdsize));
+	}	
+		return (0);
 }

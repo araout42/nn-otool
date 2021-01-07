@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 17:40:09 by araout            #+#    #+#             */
-/*   Updated: 2020/10/19 19:19:02 by araout           ###   ########.fr       */
+/*   Updated: 2021/01/07 09:30:53 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int				segment_32(t_load_command *lc)
 
 	seg = (t_segment_command *)lc;
 	sect = (t_section *)((void *)seg + sizeof(*seg));
-	nsect = seg->nsects;
+	nsect = SWAPIF(seg->nsects);
 	i = -1;
 	while (++i < nsect)
 	{
@@ -48,10 +48,10 @@ t_list*			build_lst_32(t_symtab_command *sym, char *strtbl, t_nlist *el)
 	unsigned int	i;
 
 	i = 0;
-	while (sym->nsyms > i)
+	while (SWAPIF(sym->nsyms) > i)
 	{
-		nm = make_node(el[i].n_value, el[i].n_sect,
-				strtbl + el[i].n_un.n_strx, el[i].n_type);
+		nm = make_node32(SWAPIF(el[i].n_value), el[i].n_sect,
+				strtbl + (SWAPIF(el[i].n_un.n_strx)), el[i].n_type);
 		if (!lst)
 		{
 			if (!(lst = ft_list_create((char *)nm, sizeof(nm))))
@@ -65,15 +65,21 @@ t_list*			build_lst_32(t_symtab_command *sym, char *strtbl, t_nlist *el)
 	return (lst_begin);
 }
 
-int				symtab_32(t_symtab_command *sym, char *ptr, t_list *lst)
+int				symtab_32(t_symtab_command *sym, char *ptr, t_list *lst, off_t size)
 {
 	char		*strtable;
 	t_nm		*nm;
 	t_list		*lst_begin;
 	t_nlist		*el;
 
-	el = (void *)ptr + sym->symoff;
-	strtable = (void *)ptr + sym->stroff;
+	if (check_corrupt((void*)(sym+1), ptr, size))
+		return (ERR_FILE_CORRUPT);
+	el = (void *)ptr + (SWAPIF(sym->symoff));
+	strtable = (void *)ptr + (SWAPIF(sym->stroff));
+	if (check_corrupt((void*)el+1, ptr, size))
+		return (ERR_FILE_CORRUPT);
+	if (check_corrupt((void*)strtable+1, ptr, size))
+		return (ERR_FILE_CORRUPT);
 	if (!(lst = build_lst_32(sym, strtable, el)))
 		return (-1);
 	lst_begin = lst;
@@ -88,24 +94,41 @@ int				symtab_32(t_symtab_command *sym, char *ptr, t_list *lst)
 	return (0);
 }
 
-int				handle_32(char *ptr)
+int				handle_32(char *ptr, off_t size)
 {
 	t_mach_header			*header;
-	int						ncmds;
+	uint32_t				ncmds;
 	t_load_command			*lc;
 	int						i;
+	t_symtab_command		*sym;
+	int						ret;
 
 	i = -1;
+	if (*(unsigned int*)ptr == MH_CIGAM)
+		g_sections.swap = 1;
+	else
+		g_sections.swap = 0;
 	header = (t_mach_header *)ptr;
-	ncmds = header->ncmds;
+	if(check_corrupt(header+1, ptr, size))
+		return (ERR_FILE_CORRUPT);
+	ncmds = SWAPIF(header->ncmds);
 	lc = (void *)ptr + sizeof(t_mach_header);
-	while (++i < ncmds)
+	while (ncmds--)
 	{
-		if (lc && lc->cmd == LC_SEGMENT)
-			segment_32((t_load_command *)lc);
-		if (lc && lc->cmd == LC_SYMTAB)
-			symtab_32((t_symtab_command *)lc, ptr, NULL);
-		lc = (void *)lc + lc->cmdsize;
+		if(check_corrupt((void*)lc+1, ptr, size))
+			return (ERR_FILE_CORRUPT);
+		if (g_sections.is_set == 0 && lc && SWAPIF(lc->cmd) == LC_SEGMENT)
+		{
+			segment_32(lc);
+			g_sections.is_set = 1;
+		}
+		if (lc && SWAPIF(lc->cmd) == LC_SYMTAB)
+		{
+			sym = (t_symtab_command *)lc;
+			if ((ret = symtab_32(sym, ptr, NULL, size)) != 0)
+				return (ret);
+		}
+		lc = (void *)lc + (SWAPIF(lc->cmdsize));
 	}
 	return (0);
 }

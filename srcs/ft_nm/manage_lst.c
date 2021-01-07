@@ -6,29 +6,100 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 17:44:32 by araout            #+#    #+#             */
-/*   Updated: 2020/11/01 20:54:13 by araout           ###   ########.fr       */
+/*   Updated: 2021/01/07 15:17:48 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <ft_nm.h>
 
+void			get_letter_key(t_nm *nm)
+{
+	if (ft_strlen(nm->n_strx) == 0)
+		return ;
+	if (nm->n_type == N_UNDF && nm->n_ext)
+	{
+		nm->key = 'U';
+	}
+	if (nm->n_type == N_ABS)
+		nm->key = 'A';
+	else if (nm->n_type == N_INDR)
+		nm->key = 'I';
+	else if (nm->n_type == N_SECT && nm->n_ext)
+	{
+		if (nm->n_sect == g_sections.bss)
+			nm->key = 'B';
+		else if (nm->n_sect == g_sections.data)
+			nm->key = 'D';
+		else if (nm->n_sect == g_sections.text)
+			nm->key = 'T';
+		else
+			nm->key = 'S';
+	}
+	else if (nm->n_ext && nm->n_value)
+			nm->key = 'C';
+	else if (nm->n_type == N_ABS)
+		nm->key = 'a';
+	else if (nm->n_type == N_INDR)
+		nm->key = 'i';
+	else if (nm->n_type == N_SECT)
+	{
+		if (nm->n_sect == g_sections.bss)
+			nm->key = 'b';
+		else if (nm->n_sect == g_sections.data)
+			nm->key = 'd';
+		else if (nm->n_sect == g_sections.text)
+			nm->key = 't';
+		else
+			nm->key = 's';
+	}
+}
+
 t_nm			*make_node(uint64_t n_value, int n_sect, char *n_strx, int type)
 {
 	t_nm		*nm;
-
 	if (!(nm = ft_memalloc(sizeof(t_nm))))
 		return (NULL);
-	nm->n_value = n_value;
+	nm->n_value = SWAPIF64(n_value);
 	nm->n_sect = n_sect;
 	nm->n_strx = ft_strdup(n_strx);
 	nm->n_type = type & N_TYPE;
 	nm->n_ext = type & N_EXT;
+	get_letter_key(nm);
+	return (nm);
+}
+
+t_nm			*make_node32(uint32_t n_value, int n_sect, char *n_strx, int type)
+{
+	t_nm		*nm;
+	if (!(nm = ft_memalloc(sizeof(t_nm))))
+		return (NULL);
+	nm->n_value = SWAPIF(n_value);
+	nm->n_sect = n_sect;
+	nm->n_strx = ft_strdup(n_strx);
+	nm->n_type = type & N_TYPE;
+	nm->n_ext = type & N_EXT;
+	get_letter_key(nm);
 	return (nm);
 }
 
 int				compare_ascii(t_list *a, t_list *b)
 {
-	return (ft_strcmp(((t_nm *)a->content)->n_strx,
+	if (ft_strcmp(((t_nm *)a->content)->n_strx,
+				((t_nm *)b->content)->n_strx) == 0)
+	if (ft_strcmp(&((t_nm *)a->content)->key,
+				&((t_nm *)b->content)->key) == 0)
+		{
+			if (((t_nm*)a->content)->n_value > ((t_nm *)b->content)->n_value)
+				return (1);
+			else if (((t_nm*)a->content)->n_value == ((t_nm *)b->content)->n_value)
+				return (1);
+			else
+				return (-1);
+		}
+	else
+		return (ft_strcmp(&((t_nm *)a->content)->key, &((t_nm *)b->content)->key));
+	else
+		return (ft_strcmp(((t_nm *)a->content)->n_strx,
 				((t_nm *)b->content)->n_strx));
 }
 
