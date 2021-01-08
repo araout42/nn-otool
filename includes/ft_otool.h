@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 04:33:02 by araout            #+#    #+#             */
-/*   Updated: 2021/01/07 14:20:14 by araout           ###   ########.fr       */
+/*   Updated: 2021/01/08 18:11:29 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # define AR_CIGAM 0x213c6172
 # define SWAPIF(x) g_sections.swap ? swap_uint32(x) : x
 # define SWAPIF64(x) g_sections.swap ? swap_uint64(x) : x
+# define HEX_STRING "0123456789abcdef"
 # include <unistd.h>
 # include <stdio.h>
 # include <sys/mman.h>
