@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 04:32:17 by araout            #+#    #+#             */
-/*   Updated: 2021/01/07 14:09:51 by araout           ###   ########.fr       */
+/*   Updated: 2021/01/11 18:32:34 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,10 @@ typedef struct symtab_command			t_symtab_command;
 typedef struct symtab_command_64		t_symtab_command_64;
 typedef struct fat_header				t_fat_header;
 typedef struct ar_hdr					t_ar_hdr;
+
+
+void									ft_cleanode(void *content);
+void									free_lst(t_list **lst);
 void									print_output(t_nm *nm, int flag);
 int										handle_32(char *ptr, off_t size);
 int										symtab_64(t_symtab_command *sym,

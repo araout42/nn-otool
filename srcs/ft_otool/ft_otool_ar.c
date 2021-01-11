@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_nm_ar.c                                         :+:      :+:    :+:   */
+/*   ft_otool_ar.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: araout </var/mail/araout>                  +#+  +:+       +#+        */
+/*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/19 20:30:30 by araout            #+#    #+#             */
-/*   Updated: 2021/01/11 17:08:27 by araout           ###   ########.fr       */
+/*   Created: 2021/01/11 16:57:25 by araout            #+#    #+#             */
+/*   Updated: 2021/01/11 18:07:00 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <ft_nm.h>
+#include <ft_otool.h>
 
-int			handle_archive(void *ptr, off_t s, char *filename)
+int		handle_archive(char *ptr, off_t s,char *filename)
 {
 	struct ar_hdr	*header;
 	char			*str;
@@ -34,9 +34,9 @@ int			handle_archive(void *ptr, off_t s, char *filename)
 		len = ft_strlen(str);
 		while (!str[len++])
 			;
-		if ((ret = nm(ptr + sizeof(struct ar_hdr) + len - 1, s, NULL)) != 0)
+		if ((ret = otool(ptr + sizeof(struct ar_hdr) + len - 1, s, NULL)) != 0)
 			return (ret);
 		ptr += ft_atoi(header->ar_size) + sizeof(struct ar_hdr);
 	}
-	return (EXIT_SUCCESS);
+	return (0);
 }

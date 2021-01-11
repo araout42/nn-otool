@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 14:03:38 by araout            #+#    #+#             */
-/*   Updated: 2021/01/08 18:26:30 by araout           ###   ########.fr       */
+/*   Updated: 2021/01/11 17:56:44 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,20 +54,18 @@ int			segment_64(t_load_command *lc, void* ptr, off_t size)
 {
 	t_segment_command_64	*seg;
 	t_section_64			*sect;
-	int					i;
+	uint64_t					i;
+	uint64_t					nsects;
 
 	seg = (t_segment_command_64 *)lc;
 	sect = (t_section_64 *)((void*)seg + sizeof(*seg));
+	nsects = SWAPIF64(seg->nsects);
 	i = -1;
-	while (++i < SWAPIF64(seg->nsects) && !check_corrupt(sect + i, ptr, size))
+	while (++i < nsects)
 	{
-		if (!ft_strcmp((sect + i)->sectname, SECT_TEXT)
-				&& !ft_strcmp((sect + i)->segname, SEG_TEXT))
+		if (!ft_strcmp((sect + i)->sectname, SECT_TEXT) && !ft_strcmp((sect + i)->segname, SEG_TEXT))
 		{
-			if (check_corrupt((void*)ptr + (SWAPIF64(sect[i].offset)), ptr, size))
-			{
-				return (ERR_FILE_CORRUPT);
-			}
+			ft_printf("Contents of (__TEXT,__text) section\n");
 			return (print_output_64(ptr + (SWAPIF64((sect[i].offset))), size, SWAPIF64(sect[i].size), SWAPIF64(sect[i].addr)));
 		}
 	}
@@ -94,14 +92,13 @@ int handle_64(char *ptr, off_t size)
 		return (ERR_FILE_CORRUPT);
 	while (--ncmds)
 	{
-		if (check_corrupt((void*)lc+1, ptr, size))
+		if (check_corrupt((void*)lc, ptr, size))
 			return (ERR_FILE_CORRUPT);
 		if (SWAPIF64(lc->cmd) == LC_SEGMENT_64)
 		{
 			if ((ret = segment_64(lc, ptr, size)) != 0)
 				return (ret);
 		}
-
 		lc = (void *)lc + (SWAPIF64(lc->cmdsize));
 	}	
 		return (0);

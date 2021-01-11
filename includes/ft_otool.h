@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/01 04:33:02 by araout            #+#    #+#             */
-/*   Updated: 2021/01/08 18:11:29 by araout           ###   ########.fr       */
+/*   Updated: 2021/01/11 17:39:40 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,20 @@ typedef struct fat_header				t_fat_header;
 typedef struct ar_hdr					t_ar_hdr;
 
 
+int				otool(char *ptr, off_t size, char *filename);
+
 int				handle_file(char *filename);
 void			print_error(int err, char *f);
+
 int				handle_64(char *ptr, off_t size);
+int				handle_32(char *ptr, off_t size);
+int				handle_archive(char *ptr, off_t size,char *filename);
+int				handle_fat_32(char *ptr, off_t size, char *filename);
+int				handle_fat_64(char *ptr, off_t size, char *filename);
+
 int				check_corrupt(void *ptr, void *file, off_t size);
-uint32_t	swap_uint32(uint32_t x);
-uint64_t	swap_uint64(uint64_t x);
+void			reset_section(void);
+uint32_t		swap_uint32(uint32_t x);
+void			print_unsigned(size_t addr, size_t base, size_t len);
+uint64_t		swap_uint64(uint64_t x);
 #endif

@@ -6,7 +6,7 @@
 #    By: araout <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/01 04:38:21 by araout            #+#    #+#              #
-#    Updated: 2021/01/07 14:21:23 by araout           ###   ########.fr        #
+#    Updated: 2021/01/11 17:14:35 by araout           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,7 @@ NM_SRC = srcs/ft_nm/ft_nm.c srcs/ft_nm/manage_lst.c srcs/ft_nm/segment_64.c \
 		 srcs/ft_nm/ft_nm_fat32.c srcs/ft_nm/ft_nm_fat64.c srcs/ft_nm/endian.c \
 		 srcs/ft_nm/ft_nm_ar.c srcs/ft_nm/check.c\
 
-OTOOL_SRC = srcs/ft_otool/ft_otool.c srcs/ft_otool/otool64.c srcs/ft_otool/check.c \
-			srcs/ft_otool/endian.c
+OTOOL_SRC = srcs/ft_otool/ft_otool.c srcs/ft_otool/otool64.c srcs/ft_otool/check.c srcs/ft_otool/otool32.c srcs/ft_otool/endian.c srcs/ft_otool/ft_otool_ar.c srcs/ft_otool/ft_otool_fat32.c srcs/ft_otool/ft_otool_fat64.c
 
 
 NM_OBJ = $(NM_SRC:.c=.o)

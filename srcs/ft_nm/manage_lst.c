@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 17:44:32 by araout            #+#    #+#             */
-/*   Updated: 2021/01/07 15:17:48 by araout           ###   ########.fr       */
+/*   Updated: 2021/01/11 18:32:09 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,33 @@ void			get_letter_key(t_nm *nm)
 			nm->key = 't';
 		else
 			nm->key = 's';
+	}
+}
+
+
+void ft_cleanode(void *content)
+{
+	t_nm	*nm;
+
+	nm = content;
+	free(nm->n_strx);
+	free(nm);
+}
+
+void		free_lst(t_list **lst)
+{
+	t_list	*tmp;
+	t_list	*head;
+
+	tmp = NULL;
+	head = *lst;
+	while (head)
+	{
+		tmp = head;
+		head = head->next;
+		ft_cleanode(tmp->content);
+		free(tmp);
+		tmp = NULL;
 	}
 }
 

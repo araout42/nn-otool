@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_nm_fat32.c                                      :+:      :+:    :+:   */
+/*   ft_otool_fat32.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/12 18:16:50 by araout            #+#    #+#             */
-/*   Updated: 2021/01/11 17:19:11 by araout           ###   ########.fr       */
+/*   Created: 2021/01/11 17:11:30 by araout            #+#    #+#             */
+/*   Updated: 2021/01/11 18:07:21 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_nm.h"
+#include <ft_otool.h>
 
 static int	is_hostarch(cpu_type_t type)
 {
@@ -29,6 +29,7 @@ int			handle_fat_32(char *ptr, off_t size, char *filename)
 	struct fat_arch		*arch;
 	int					ret;
 
+	(void)filename;
 	if (*(unsigned int*)ptr == FAT_CIGAM)
 		g_sections.swap = 1;
 	else
@@ -43,8 +44,10 @@ int			handle_fat_32(char *ptr, off_t size, char *filename)
 			return (ERR_FILE_CORRUPT);
 		if (nfat > 1 && !i && is_hostarch(SWAPIF(arch[i + 1].cputype)))
 			continue ;
-		if ((ret = nm(ptr + (SWAPIF(arch[i].offset)), size, filename )) != 0)
+		if ((ret = otool(ptr + (SWAPIF(arch[i].offset)), size, 0)) != 0)
+		{
 			return (ret);
+		}
 		if (is_hostarch(swap_uint32(arch[i].cputype)))
 			return (EXIT_SUCCESS);
 	}

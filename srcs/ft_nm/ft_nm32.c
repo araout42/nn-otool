@@ -6,7 +6,7 @@
 /*   By: araout <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 17:40:09 by araout            #+#    #+#             */
-/*   Updated: 2021/01/07 09:30:53 by araout           ###   ########.fr       */
+/*   Updated: 2021/01/11 18:33:00 by araout           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int				symtab_32(t_symtab_command *sym, char *ptr, t_list *lst, off_t size)
 		print_output(nm, 32);
 		lst = lst->next;
 	}
+	free_lst(&lst_begin);
 	return (0);
 }
 
