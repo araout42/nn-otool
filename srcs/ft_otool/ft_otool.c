@@ -17,8 +17,6 @@ int				main(int ac, char **av)
 	int		i;
 	int		res;
 
-	while (1)
-	{
 	i = 0;
 	if (ac == 1)
 	{
@@ -33,7 +31,6 @@ int				main(int ac, char **av)
 				print_error(res, av[i]);
 		}
 		ac = 2;
-	}
 	}
 	return (0);
 }
@@ -115,7 +112,7 @@ void			print_error(int err, char *f)
 	if (err == ERR_FILE_CORRUPT)
 		ft_printf_fd(2, "ft_otool: error: %s : file is corrputed.\n", f);
 	else if (err == ERR_FILE_FORMAT)
-		ft_printf_fd(2, "ft_otool: error: %s : file format unrecognized\n", f);
+		ft_printf_fd(1, "%s: is not an object file\n", f);
 	if (errno == EPERM)
 		ft_printf_fd(2, "ft_otool: error: %s : Operation not permitted.\n", f);
 	else if (errno == ENOENT)
